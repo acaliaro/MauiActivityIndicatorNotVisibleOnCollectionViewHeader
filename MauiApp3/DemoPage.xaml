@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MauiApp3.DemoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:segmentedControl="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
+    xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
+    xmlns:viewmodel="clr-namespace:MauiApp3"
+    Title="DemoPage"
+    x:DataType="viewmodel:DemoViewModel">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior
+            Command="{Binding NavBarBackButtonCommand}"
+            IsEnabled="{Binding IsBackButtonEnabled}"
+            IsVisible="{Binding HasBackButton}" />
+
+    </Shell.BackButtonBehavior>
+
+    <tabView:SfTabView x:Name="tabView">
+        <!--  Define the items (tabs) of the SfTabView  -->
+        <tabView:SfTabView.Items>
+            <!--  First tab item with header "Call"  -->
+            <tabView:SfTabItem Header="Call">
+                <!--  Content of the "Call" tab: a Grid with a red background  -->
+                <tabView:SfTabItem.Content>
+                    <Grid
+                        Padding="20"
+                        ColumnDefinitions="*"
+                        RowDefinitions="Auto, *"
+                        RowSpacing="10">
+                        <VerticalStackLayout Grid.Row="0" Spacing="20">
+                            <Entry Placeholder="Inserisci nome" Text="{Binding Nome}" />
+
+                            <Entry Placeholder="Inserisci cognome" Text="{Binding Cognome}" />
+
+                            <Button Command="{Binding AddCommand}" Text="Inserisci" />
+                            <ActivityIndicator IsRunning="{Binding IsActivityIndicatorVisible}" IsVisible="{Binding IsActivityIndicatorVisible}" />
+
+                        </VerticalStackLayout>
+
+                        <RefreshView Grid.Row="1">
+                            <CollectionView ItemsSource="{Binding Righe}" SelectionMode="Single">
+
+                                <CollectionView.Header>
+                                    <DataTemplate>
+                                        <Grid
+                                            BackgroundColor="Pink"
+                                            ColumnDefinitions="*"
+                                            RowDefinitions="Auto, Auto, Auto">
+
+                                            <Button
+                                                Grid.Row="0"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:DemoViewModel}}, Path=ShowActivityIndicatorCommand}"
+                                                Text="Show activity indicator" />
+
+                                            <ActivityIndicator
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                IsRunning="{Binding IsActivityIndicatorVisible}"
+                                                IsVisible="{Binding IsActivityIndicatorVisible}"
+                                                Color="Blue" />
+                                            
+                                            <ActivityIndicator
+                                                Grid.Row="2"
+                                                Grid.Column="0"
+                                                IsRunning="True"
+                                                IsVisible="True"
+                                                Color="Green" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.Header>
+                                <CollectionView.ItemTemplate x:DataType="viewmodel:RigaDto">
+                                    <DataTemplate>
+                                        <Border>
+                                            <Grid
+                                                Margin="10"
+                                                ColumnDefinitions="*,*,Auto"
+                                                RowDefinitions="Auto">
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    Text="{Binding Nome}"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    Grid.Row="0"
+                                                    Grid.Column="1"
+                                                    Text="{Binding Cognome}"
+                                                    VerticalOptions="Center" />
+
+                                                <Button
+                                                    Grid.Row="0"
+                                                    Grid.Column="2"
+                                                    BackgroundColor="Red"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:DemoViewModel}}, Path=DeleteCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    HorizontalOptions="End"
+                                                    Text="Elimina" />
+                                            </Grid>
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal" />
+                                                    <VisualState x:Name="Selected">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="BackgroundColor" Value="Red" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </RefreshView>
+
+                    </Grid>
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+            <!--  Second tab item with header "Favorites"  -->
+            <tabView:SfTabItem Header="Favorites">
+                <tabView:SfTabItem.Content>
+                    <!--  Content of the "Favorites" tab: a ListView with predefined items  -->
+                    <ListView RowHeight="50">
+                        <ListView.ItemsSource>
+                            <!--  Define an array of strings as the data source for the ListView  -->
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>James</x:String>
+                                <x:String>Richard</x:String>
+                                <x:String>Michael</x:String>
+                                <x:String>Alex</x:String>
+                                <x:String>Clara</x:String>
+                            </x:Array>
+                        </ListView.ItemsSource>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <!--  Define the layout for each item in the ListView  -->
+                                    <Grid Margin="10,5">
+                                        <Label
+                                            FontSize="16"
+                                            HorizontalOptions="Start"
+                                            Text="{Binding}"
+                                            TextColor="#666666"
+                                            VerticalOptions="Start" />
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+            <!--  Third tab item with header "Contacts"  -->
+            <tabView:SfTabItem Header="Contacts">
+                <tabView:SfTabItem.Content>
+                    <!--  Content of the "Contacts" tab: a Grid with a blue background  -->
+                    <Grid BackgroundColor="Blue" />
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+        </tabView:SfTabView.Items>
+    </tabView:SfTabView>
+
+
+</ContentPage>
