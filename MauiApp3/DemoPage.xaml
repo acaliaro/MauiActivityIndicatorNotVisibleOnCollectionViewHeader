@@ -43,7 +43,7 @@
                         <RefreshView Grid.Row="1">
                             <CollectionView ItemsSource="{Binding Righe}" SelectionMode="Single">
 
-                                <CollectionView.Header>
+                                <CollectionView.HeaderTemplate>
                                     <DataTemplate>
                                         <Grid
                                             BackgroundColor="Pink"
@@ -70,7 +70,7 @@
                                                 Color="Green" />
                                         </Grid>
                                     </DataTemplate>
-                                </CollectionView.Header>
+                                </CollectionView.HeaderTemplate>
                                 <CollectionView.ItemTemplate x:DataType="viewmodel:RigaDto">
                                     <DataTemplate>
                                         <Border>
